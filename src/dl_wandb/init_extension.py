@@ -1,0 +1,91 @@
+"""W&B scaffold extension for dl-init-experiment."""
+
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+from dl_core import __version__ as dl_core_version
+from dl_core.init_extensions import InitExtension, ScaffoldContext
+
+
+def _wandb_callback_block() -> str:
+    """Render the scaffold callback block for W&B logging."""
+
+    return """
+  wandb:
+    project: my_experiment
+    entity: null
+    group: my_experiment
+    job_type: train
+    tags: []
+    log_config: true
+"""
+
+
+def _wandb_tracking_fields() -> str:
+    """Render W&B-specific additions to the sweep tracking block."""
+
+    return """tracking:
+  backend: wandb
+  project: my_experiment
+  entity: null
+  group: my_experiment
+"""
+
+
+def _env_example() -> str:
+    """Render a minimal environment example for W&B auth."""
+
+    return "WANDB_API_KEY=<your-wandb-api-key>\n"
+
+
+class WandbInitExtension(InitExtension):
+    """Expose W&B scaffold wiring when dl-wandb is installed."""
+
+    name = "wandb"
+
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
+        """Register the W&B scaffold flag."""
+
+        parser.add_argument(
+            "--with-wandb",
+            action="store_true",
+            help="Include W&B callback wiring and tracking defaults.",
+        )
+
+    def is_enabled(
+        self,
+        args: argparse.Namespace,
+        discovered_extensions: dict[str, InitExtension],
+    ) -> bool:
+        """Enable W&B wiring when explicitly requested."""
+
+        del discovered_extensions
+        return bool(getattr(args, "with_wandb", False))
+
+    def apply(self, context: ScaffoldContext) -> None:
+        """Apply W&B-specific scaffold mutations."""
+
+        context.replace_in_file(
+            "pyproject.toml",
+            f'"dl-core>={dl_core_version}"',
+            f'"dl-core[wandb]>={dl_core_version}"',
+        )
+        context.append_bootstrap_import("import dl_wandb  # noqa: F401")
+        context.append_readme_note(
+            "W&B support is enabled. Run `wandb login` and review the "
+            "`callbacks.wandb` block in `configs/base.yaml` before training."
+        )
+        context.replace_in_file(
+            Path("configs") / "base.yaml",
+            "  metric_logger:\n    log_frequency: 1\n",
+            "  metric_logger:\n    log_frequency: 1\n"
+            f"{_wandb_callback_block()}",
+        )
+        context.replace_in_file(
+            Path("configs") / "base_sweep.yaml",
+            "tracking:\n  group: my_experiment\n",
+            _wandb_tracking_fields(),
+        )
+        context.set_file(".env.example", _env_example())
