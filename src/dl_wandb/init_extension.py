@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from dl_core import __version__ as dl_core_version
 from dl_core.init_extensions import InitExtension, ScaffoldContext
 
 
@@ -69,8 +68,8 @@ class WandbInitExtension(InitExtension):
 
         context.replace_in_file(
             "pyproject.toml",
-            f'"dl-core>={dl_core_version}"',
-            f'"dl-core[wandb]>={dl_core_version}"',
+            '"dl-core"',
+            '"dl-core[wandb]"',
         )
         context.append_bootstrap_import("import dl_wandb  # noqa: F401")
         context.append_readme_note(
