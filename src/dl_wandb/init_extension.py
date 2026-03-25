@@ -71,6 +71,7 @@ class WandbInitExtension(InitExtension):
             '"dl-core"',
             '"dl-core[wandb]"',
         )
+        context.add_dependency("dl-wandb")
         context.append_bootstrap_import("import dl_wandb  # noqa: F401")
         context.append_readme_note(
             "W&B support is enabled. Run `wandb login` and review the "

@@ -54,6 +54,7 @@ def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:
     WandbInitExtension().apply(context)
 
     assert '"dl-core[wandb]"' in context.get_file("pyproject.toml")
+    assert '"dl-wandb"' in context.get_file("pyproject.toml")
     assert "import dl_wandb" in context.get_file(Path("src") / "bootstrap.py")
     assert "backend: wandb" in context.get_file(Path("configs") / "base_sweep.yaml")
     assert "callbacks:" in context.get_file(Path("configs") / "base.yaml")
