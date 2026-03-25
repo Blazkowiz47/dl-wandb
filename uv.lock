@@ -260,7 +260,7 @@ nvtx = [
 
 [[package]]
 name = "dl-core"
-version = "0.0.8"
+version = "0.0.9"
 source = { editable = "../dl-core" }
 dependencies = [
     { name = "albumentations" },
@@ -296,7 +296,7 @@ provides-extras = ["azure", "mlflow", "wandb", "dev"]
 
 [[package]]
 name = "dl-wandb"
-version = "0.0.3"
+version = "0.0.4"
 source = { editable = "." }
 dependencies = [
     { name = "dl-core" },
