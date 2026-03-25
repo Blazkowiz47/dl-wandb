@@ -8,7 +8,11 @@ users to install it through `dl-core[wandb]`.
 
 ## Install
 
-Install from PyPI:
+Current public validation releases are published on TestPyPI. Once the package
+is promoted to PyPI, the same install forms below will work against the main
+index.
+
+PyPI install target:
 
 ```bash
 pip install "dl-core[wandb]"
@@ -18,6 +22,12 @@ Install the package directly:
 
 ```bash
 pip install dl-wandb
+```
+
+Current TestPyPI + `uv` projects should add both direct dependencies:
+
+```bash
+uv add "dl-core[wandb]" dl-wandb
 ```
 
 ## Scope
@@ -37,7 +47,7 @@ pip install dl-wandb
 Install it through the `dl-core` extra:
 
 ```bash
-uv add "dl-core[wandb]"
+uv add "dl-core[wandb]" dl-wandb
 ```
 
 Then scaffold a W&B-ready experiment repository:
