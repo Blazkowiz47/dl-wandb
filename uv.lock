@@ -260,7 +260,7 @@ nvtx = [
 
 [[package]]
 name = "dl-core"
-version = "0.0.1"
+version = "0.0.7"
 source = { editable = "../dl-core" }
 dependencies = [
     { name = "albumentations" },
@@ -280,6 +280,7 @@ dependencies = [
 requires-dist = [
     { name = "albumentations" },
     { name = "dl-azure", marker = "extra == 'azure'", editable = "../dl-azure" },
+    { name = "dl-mlflow", marker = "extra == 'mlflow'", editable = "../dl-mlflow" },
     { name = "dl-wandb", marker = "extra == 'wandb'", editable = "." },
     { name = "numpy" },
     { name = "opencv-python" },
@@ -291,11 +292,11 @@ requires-dist = [
     { name = "torchvision" },
     { name = "tqdm" },
 ]
-provides-extras = ["azure", "wandb", "dev"]
+provides-extras = ["azure", "mlflow", "wandb", "dev"]
 
 [[package]]
 name = "dl-wandb"
-version = "0.0.1"
+version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "dl-core" },

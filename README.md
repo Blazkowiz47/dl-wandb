@@ -6,6 +6,20 @@ Public Weights & Biases integration layer for `dl-core`.
 It keeps tracking-specific logic outside the core framework while still allowing
 users to install it through `dl-core[wandb]`.
 
+## Install
+
+Install from PyPI:
+
+```bash
+pip install "dl-core[wandb]"
+```
+
+Install the package directly:
+
+```bash
+pip install dl-wandb
+```
+
 ## Scope
 
 - W&B callback registration for `dl-core`
@@ -35,9 +49,19 @@ uv run dl-init-experiment --name my-exp --with-wandb
 The generated experiment package will import `dl_wandb` automatically so the
 `wandb` callback registers at runtime.
 
+## What You Get
+
+- the `wandb` callback for local training runs
+- `dl-init-experiment --with-wandb` scaffold support
+- generated W&B callback defaults and `.env.example`
+
+## Companion Packages
+
+- [`dl-core`](https://github.com/Blazkowiz47/dl-core)
+- [`dl-azure`](https://github.com/Blazkowiz47/dl-azure)
+- [`dl-mlflow`](https://github.com/Blazkowiz47/dl-mlflow)
+
 ## Documentation
 
-- [Documentation Index](./readme/README.md)
-- [TLDR: Install and Enable](./readme/tldr/1_install_and_enable.md)
-- [Guide: Wiring W&B Into an Experiment Repo](./readme/guide/1_wiring_wandb_into_an_experiment_repo.md)
-- [Technical: Callback and Scaffold Flow](./readme/technical/1_callback_and_scaffold.md)
+- [Documentation Index](https://github.com/Blazkowiz47/dl-wandb/tree/main/readme)
+- [GitHub Repository](https://github.com/Blazkowiz47/dl-wandb)

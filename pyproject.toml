@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dl-wandb"
-version = "0.0.1"
+version = "0.0.2"
 description = "Weights & Biases integration layer for dl-core."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -17,6 +17,12 @@ dependencies = [
 dev = [
     "pytest",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Blazkowiz47/dl-wandb"
+Documentation = "https://github.com/Blazkowiz47/dl-wandb/tree/main/readme"
+Repository = "https://github.com/Blazkowiz47/dl-wandb"
+Issues = "https://github.com/Blazkowiz47/dl-wandb/issues"
 
 [project.entry-points."dl_core.init_extensions"]
 wandb = "dl_wandb.init_extension:WandbInitExtension"
