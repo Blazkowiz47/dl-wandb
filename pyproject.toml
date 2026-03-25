@@ -8,6 +8,10 @@ version = "0.0.3"
 description = "Weights & Biases integration layer for dl-core."
 readme = "README.md"
 requires-python = ">=3.10"
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+]
 dependencies = [
     "dl-core",
     "wandb",

@@ -65,3 +65,7 @@ The generated experiment package will import `dl_wandb` automatically so the
 
 - [Documentation Index](https://github.com/Blazkowiz47/dl-wandb/tree/main/readme)
 - [GitHub Repository](https://github.com/Blazkowiz47/dl-wandb)
+
+## License
+
+MIT. See [LICENSE](LICENSE).
