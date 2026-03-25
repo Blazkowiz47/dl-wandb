@@ -1,38 +1,38 @@
-# dl-wandb
+# deep-learning-wandb
 
-Public Weights & Biases integration layer for `dl-core`.
+Public Weights & Biases integration layer for `deep-learning-core`.
 
-`dl-wandb` adds a W&B callback and scaffold integration on top of `dl-core`.
-It keeps tracking-specific logic outside the core framework while still allowing
-users to install it through `dl-core[wandb]`.
+`deep-learning-wandb` adds a W&B callback and scaffold integration on top of
+`deep-learning-core`. It keeps tracking-specific logic outside the core
+framework while still allowing users to install it through
+`deep-learning-core[wandb]`.
 
 ## Install
 
-Current public validation releases are published on TestPyPI. Once the package
-is promoted to PyPI, the same install forms below will work against the main
-index.
+The package is now available on PyPI under the `deep-learning-wandb` name.
+TestPyPI remains available for validation flows.
 
 PyPI install target:
 
 ```bash
-pip install "dl-core[wandb]"
+pip install "deep-learning-core[wandb]"
 ```
 
 Install the package directly:
 
 ```bash
-pip install dl-wandb
+pip install deep-learning-wandb
 ```
 
 Current TestPyPI + `uv` projects should add both direct dependencies:
 
 ```bash
-uv add "dl-core[wandb]" dl-wandb
+uv add "deep-learning-core[wandb]" deep-learning-wandb
 ```
 
 ## Scope
 
-- W&B callback registration for `dl-core`
+- W&B callback registration for `deep-learning-core`
 - Experiment scaffold integration through `dl-init-experiment --with-wandb`
 - W&B-ready config defaults for generated experiment repositories
 
@@ -44,10 +44,10 @@ uv add "dl-core[wandb]" dl-wandb
 
 ## Quick Start
 
-Install it through the `dl-core` extra:
+Install it through the `deep-learning-core` extra:
 
 ```bash
-uv add "dl-core[wandb]" dl-wandb
+uv add "deep-learning-core[wandb]" deep-learning-wandb
 ```
 
 Then scaffold a W&B-ready experiment repository:
