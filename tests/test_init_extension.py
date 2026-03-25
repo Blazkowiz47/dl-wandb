@@ -30,7 +30,7 @@ def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:
             Path("pyproject.toml"): (
                 "[project]\n"
                 "dependencies = [\n"
-                '    "dl-core",\n'
+                '    "deep-learning-core",\n'
                 "]\n"
             ),
             Path("README.md"): "# demo\n",
@@ -53,8 +53,8 @@ def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:
 
     WandbInitExtension().apply(context)
 
-    assert '"dl-core[wandb]"' in context.get_file("pyproject.toml")
-    assert '"dl-wandb"' in context.get_file("pyproject.toml")
+    assert '"deep-learning-core[wandb]"' in context.get_file("pyproject.toml")
+    assert '"deep-learning-wandb"' in context.get_file("pyproject.toml")
     assert "import dl_wandb" in context.get_file(Path("src") / "bootstrap.py")
     assert "backend: wandb" in context.get_file(Path("configs") / "base_sweep.yaml")
     assert "callbacks:" in context.get_file(Path("configs") / "base.yaml")

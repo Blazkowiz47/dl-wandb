@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "dl-wandb"
-version = "1.0.0"
+name = "deep-learning-wandb"
+version = "0.0.1"
 description = "Weights & Biases integration layer for dl-core."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
-    "dl-core",
+    "deep-learning-core",
     "wandb",
 ]
 
@@ -32,7 +32,7 @@ Issues = "https://github.com/Blazkowiz47/dl-wandb/issues"
 wandb = "dl_wandb.init_extension:WandbInitExtension"
 
 [tool.uv.sources]
-dl-core = { path = "../dl-core", editable = true }
+"deep-learning-core" = { path = "../dl-core", editable = true }
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/dl_wandb"]

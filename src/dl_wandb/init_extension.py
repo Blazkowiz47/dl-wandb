@@ -68,10 +68,10 @@ class WandbInitExtension(InitExtension):
 
         context.replace_in_file(
             "pyproject.toml",
-            '"dl-core"',
-            '"dl-core[wandb]"',
+            '"deep-learning-core"',
+            '"deep-learning-core[wandb]"',
         )
-        context.add_dependency("dl-wandb")
+        context.add_dependency("deep-learning-wandb")
         context.append_bootstrap_import("import dl_wandb  # noqa: F401")
         context.append_readme_note(
             "W&B support is enabled. Run `wandb login` and review the "

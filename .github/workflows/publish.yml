@@ -1,12 +1,12 @@
 name: Publish
 # PyPI setup required before first use:
-# 1. Create the `dl-wandb` project on PyPI.
+# 1. Create the `deep-learning-wandb` project on PyPI.
 # 2. Add a Trusted Publisher for:
 #    - owner: Blazkowiz47
 #    - repository: dl-wandb
 #    - workflow: publish.yml
-#    - environment: pypi
-# 3. Create the `pypi` GitHub environment if you want approval gates.
+#    - environment: dl-wandb
+# 3. Create the `dl-wandb` GitHub environment if you want approval gates.
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
@@ -44,7 +44,7 @@ jobs:
           dependencies = [
               dependency
               for dependency in pyproject["project"]["dependencies"]
-              if not dependency.startswith("dl-core")
+              if not dependency.startswith("deep-learning-core")
           ]
           dev_dependencies = pyproject["project"]["optional-dependencies"]["dev"]
           Path("requirements-ci.txt").write_text(
@@ -66,7 +66,7 @@ jobs:
           )
           PY
           uv pip install --python .venv/bin/python -r requirements-ci.txt
-          uv pip install --python .venv/bin/python --no-deps dl-core
+          uv pip install --python .venv/bin/python --no-deps deep-learning-core
           uv pip install --python .venv/bin/python --no-deps --editable .
 
       - name: Run tests
@@ -93,8 +93,8 @@ jobs:
       id-token: write
 
     environment:
-      name: pypi
-      url: https://pypi.org/p/dl-wandb
+      name: dl-wandb
+      url: https://pypi.org/p/deep-learning-wandb
 
     steps:
       - name: Download distribution artifacts
