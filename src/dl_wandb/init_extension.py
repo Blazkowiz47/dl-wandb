@@ -25,12 +25,26 @@ def _wandb_callback_block() -> str:
 def _wandb_tracking_fields() -> str:
     """Render W&B-specific additions to the sweep tracking block."""
 
-    return """tracking:
-  backend: wandb
+    return """  backend: wandb
   project: my_experiment
   entity: null
-  group: my_experiment
 """
+
+
+def _inject_wandb_tracking_fields(content: str) -> str:
+    """Inject W&B-specific tracking fields into the sweep scaffold."""
+
+    if "tracking:\n" not in content:
+        return content
+
+    if "tracking:\n  backend: wandb\n" in content:
+        return content
+
+    return content.replace(
+        "tracking:\n",
+        f"tracking:\n{_wandb_tracking_fields()}",
+        1,
+    )
 
 
 def _env_example() -> str:
@@ -85,7 +99,9 @@ class WandbInitExtension(InitExtension):
         )
         context.replace_in_file(
             Path("configs") / "base_sweep.yaml",
-            "tracking:\n  group: my_experiment\n",
-            _wandb_tracking_fields(),
+            context.get_file(Path("configs") / "base_sweep.yaml"),
+            _inject_wandb_tracking_fields(
+                context.get_file(Path("configs") / "base_sweep.yaml")
+            ),
         )
         context.set_file(".env.example", _env_example())
