@@ -12,7 +12,7 @@ from dl_core.core import METRICS_SOURCE_REGISTRY, TRACKER_REGISTRY
 
 def test_wandb_tracker_and_metrics_source_are_registered() -> None:
     """Importing dl-wandb should register tracker and metrics source aliases."""
-    assert dl_wandb.__version__ == "0.0.1"
+    assert dl_wandb.__version__ == "0.0.2"
     assert TRACKER_REGISTRY.is_registered("wandb")
     assert METRICS_SOURCE_REGISTRY.is_registered("wandb")
 
