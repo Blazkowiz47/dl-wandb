@@ -59,6 +59,19 @@ uv run dl-init-experiment --name my-exp --with-wandb
 The generated experiment package will import `dl_wandb` automatically so the
 `wandb` callback registers at runtime.
 
+Concrete experiment flow:
+
+```bash
+uv init
+uv add deep-learning-wandb
+uv run dl-init-experiment --root-dir . --with-wandb
+uv run dl-run --config configs/base.yaml
+uv run dl-sweep --sweep experiments/lr_sweep.yaml
+```
+
+The W&B tracker uses the sweep file name as the run group, so repeated sweeps
+with different filenames show up as separate grouped runs in W&B.
+
 ## What You Get
 
 - the `wandb` callback for local training runs
