@@ -131,6 +131,28 @@ class WandbCallback(Callback):
             return
 
         self.run = wandb.init(**self._resolve_run_init_kwargs())
+        self._write_tracking_session()
+
+    def _write_tracking_session(self) -> None:
+        """Persist W&B session metadata inside the local artifact directory."""
+        artifact_manager = getattr(self.trainer, "artifact_manager", None)
+        if artifact_manager is None:
+            return
+        if not hasattr(artifact_manager, "save_tracking_session"):
+            return
+        if self.run is None:
+            return
+
+        session_data = {
+            "backend": "wandb",
+            "entity": getattr(self.run, "entity", None),
+            "project": getattr(self.run, "project", None),
+            "group": getattr(self.run, "group", None),
+            "run_id": getattr(self.run, "id", None),
+            "run_name": getattr(self.run, "name", None),
+            "url": getattr(self.run, "url", None),
+        }
+        artifact_manager.save_tracking_session(session_data)
 
     def on_epoch_end(self, epoch: int, logs: dict[str, Any] | None = None) -> None:
         """Log scalar epoch metrics to W&B."""

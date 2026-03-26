@@ -15,6 +15,29 @@ class WandbTracker(BaseTracker):
         """Return the tracker backend name."""
         return "wandb"
 
+    def setup_sweep(
+        self,
+        *,
+        experiment_name: str,
+        sweep_id: str,
+        sweep_config: dict[str, Any],
+        total_runs: int,
+        tracking_context: str | None = None,
+        tracking_uri: str | None = None,
+        resume: bool = False,
+    ) -> dict[str, Any]:
+        """Resolve the W&B group name used to tie sweep runs together."""
+        del sweep_config
+        del total_runs
+        del tracking_uri
+        del resume
+
+        if tracking_context:
+            return {"tracking_context": tracking_context}
+
+        group_name = self.tracking_config.get("group") or f"{experiment_name}-{sweep_id}"
+        return {"tracking_context": str(group_name)}
+
     def inject_tracking_config(
         self,
         config: dict[str, Any],
@@ -33,3 +56,32 @@ class WandbTracker(BaseTracker):
         tracking = config.setdefault("tracking", {})
         if tracking_context:
             tracking["group"] = tracking_context
+
+    def build_run_reference(
+        self,
+        *,
+        result: dict[str, Any] | None = None,
+        run_name: str | None = None,
+        tracking_context: str | None = None,
+        tracking_uri: str | None = None,
+    ) -> dict[str, Any] | None:
+        """Build a W&B-specific run reference for sweep tracking."""
+        del tracking_uri
+        reference = super().build_run_reference(
+            result=result,
+            run_name=run_name,
+            tracking_context=tracking_context,
+        )
+        if reference is None:
+            return None
+
+        reference["backend"] = "wandb"
+        project = self.tracking_config.get("project")
+        entity = self.tracking_config.get("entity")
+        if isinstance(project, str) and project:
+            reference.setdefault("project", project)
+        if isinstance(entity, str) and entity:
+            reference.setdefault("entity", entity)
+        if tracking_context:
+            reference.setdefault("group", tracking_context)
+        return reference
