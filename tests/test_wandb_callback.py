@@ -78,3 +78,32 @@ def test_wandb_callback_initializes_logs_and_finishes(
     assert init_calls[0]["name"] == "demo-run"
     assert log_calls == [({"train_loss": 0.5}, 1)]
     assert finish_calls == [True]
+
+
+def test_wandb_callback_uses_tracking_context_as_group(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    """The callback should fall back to tracking context when group is unset."""
+
+    init_calls: list[dict] = []
+
+    def fake_init(**kwargs):
+        init_calls.append(kwargs)
+        return SimpleNamespace(name="demo-run")
+
+    monkeypatch.setattr(
+        "dl_wandb.callbacks.wandb.wandb",
+        SimpleNamespace(init=fake_init, log=lambda *args, **kwargs: None, finish=lambda: None),
+    )
+
+    callback = WandbCallback(project="demo-project", group=None)
+    trainer = DummyTrainer()
+    trainer.config["tracking"] = {
+        "context": "fallback-group",
+        "run_name": "demo-run",
+    }
+    callback.set_trainer(trainer)
+
+    callback.on_training_start()
+
+    assert init_calls[0]["group"] == "fallback-group"

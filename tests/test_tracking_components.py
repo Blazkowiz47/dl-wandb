@@ -49,6 +49,19 @@ def test_wandb_tracker_setup_sweep_returns_group_context() -> None:
     assert tracker_state == {"tracking_context": "demo-group"}
 
 
+def test_wandb_tracker_defaults_group_to_sweep_file_stem() -> None:
+    """The W&B tracker should use the sweep filename as the default group."""
+    tracker = TRACKER_REGISTRY.get("wandb")
+    tracker_state = tracker.setup_sweep(
+        experiment_name="demo-experiment",
+        sweep_id="sweep-001",
+        sweep_config={"sweep_file": "experiments/live_a_sweep.yaml"},
+        total_runs=2,
+    )
+
+    assert tracker_state == {"tracking_context": "live_a_sweep"}
+
+
 def test_wandb_metrics_source_prefers_remote_summary(
     monkeypatch: MonkeyPatch,
 ) -> None:

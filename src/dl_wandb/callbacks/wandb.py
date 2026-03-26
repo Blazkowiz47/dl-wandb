@@ -109,7 +109,7 @@ class WandbCallback(Callback):
         init_kwargs = {
             "project": self.project or tracking.get("project") or experiment.get("name"),
             "entity": self.entity or tracking.get("entity"),
-            "group": self.group or tracking.get("group"),
+            "group": self.group or tracking.get("group") or tracking.get("context"),
             "name": tracking.get("run_name") or runtime.get("name"),
             "job_type": self.job_type,
             "tags": tags or None,

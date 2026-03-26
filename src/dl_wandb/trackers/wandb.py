@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from dl_core.core import BaseTracker, register_tracker
@@ -27,7 +28,6 @@ class WandbTracker(BaseTracker):
         resume: bool = False,
     ) -> dict[str, Any]:
         """Resolve the W&B group name used to tie sweep runs together."""
-        del sweep_config
         del total_runs
         del tracking_uri
         del resume
@@ -35,7 +35,15 @@ class WandbTracker(BaseTracker):
         if tracking_context:
             return {"tracking_context": tracking_context}
 
-        group_name = self.tracking_config.get("group") or f"{experiment_name}-{sweep_id}"
+        configured_group = self.tracking_config.get("group")
+        if isinstance(configured_group, str) and configured_group:
+            return {"tracking_context": configured_group}
+
+        sweep_file = sweep_config.get("sweep_file")
+        if isinstance(sweep_file, str) and sweep_file:
+            return {"tracking_context": Path(sweep_file).stem}
+
+        group_name = f"{experiment_name}-{sweep_id}"
         return {"tracking_context": str(group_name)}
 
     def inject_tracking_config(
