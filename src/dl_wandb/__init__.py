@@ -2,7 +2,7 @@
 
 from . import callbacks, metrics_sources, trackers
 
-__version__ = "0.0.2a2"
+__version__ = "0.0.2a3"
 
 __all__ = [
     "__version__",

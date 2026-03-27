@@ -260,7 +260,7 @@ nvtx = [
 
 [[package]]
 name = "deep-learning-core"
-version = "0.0.2a2"
+version = "0.0.2a3"
 source = { editable = "../dl-core" }
 dependencies = [
     { name = "albumentations" },
@@ -296,7 +296,7 @@ provides-extras = ["azure", "mlflow", "wandb", "dev"]
 
 [[package]]
 name = "deep-learning-wandb"
-version = "0.0.2a2"
+version = "0.0.2a3"
 source = { editable = "." }
 dependencies = [
     { name = "deep-learning-core" },
