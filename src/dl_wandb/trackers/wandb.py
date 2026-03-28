@@ -84,7 +84,10 @@ class WandbTracker(BaseTracker):
             return None
 
         reference["backend"] = "wandb"
-        project = self.tracking_config.get("project")
+        project = (
+            self.tracking_config.get("project")
+            or self.tracking_config.get("experiment_name")
+        )
         entity = self.tracking_config.get("entity")
         if isinstance(project, str) and project:
             reference.setdefault("project", project)

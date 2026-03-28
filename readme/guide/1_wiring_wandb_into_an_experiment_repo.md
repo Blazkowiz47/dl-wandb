@@ -30,4 +30,6 @@ The callback reads from both:
 - top-level `tracking` values from the generated run config
 
 That lets sweep-generated run names and sweep names flow through to W&B without
-hardcoding them inside the callback implementation.
+hardcoding them inside the callback implementation. Use
+`tracking.experiment_name` when you want a W&B project name different from the
+repository root.

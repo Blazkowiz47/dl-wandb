@@ -13,7 +13,6 @@ def _wandb_callback_block() -> str:
 
     return """
   wandb:
-    project: my_experiment
     entity: null
     sweep_name: null
     job_type: train
@@ -26,7 +25,6 @@ def _wandb_tracking_fields() -> str:
     """Render W&B-specific additions to the sweep tracking block."""
 
     return """  backend: wandb
-  project: my_experiment
   entity: null
 """
 

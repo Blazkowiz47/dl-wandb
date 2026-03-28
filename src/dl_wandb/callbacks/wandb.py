@@ -107,7 +107,12 @@ class WandbCallback(Callback):
             tags.extend(str(tag) for tag in runtime_tags)
 
         init_kwargs = {
-            "project": self.project or tracking.get("project") or experiment.get("name"),
+            "project": (
+                self.project
+                or tracking.get("project")
+                or tracking.get("experiment_name")
+                or experiment.get("name")
+            ),
             "entity": self.entity or tracking.get("entity"),
             "group": (
                 self.sweep_name

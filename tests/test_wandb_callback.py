@@ -33,6 +33,7 @@ class DummyTrainer:
                 "description": "demo-description",
             },
             "tracking": {
+                "experiment_name": "demo-project",
                 "sweep_name": "demo-group",
                 "run_name": "demo-run",
                 "description": "tracking-description",
@@ -107,3 +108,29 @@ def test_wandb_callback_uses_tracking_context_as_sweep_name(
     callback.on_training_start()
 
     assert init_calls[0]["group"] == "fallback-group"
+
+
+def test_wandb_callback_uses_tracking_experiment_name_for_project(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    """The callback should map tracking.experiment_name into the W&B project."""
+    init_calls: list[dict] = []
+
+    def fake_init(**kwargs):
+        init_calls.append(kwargs)
+        return SimpleNamespace(name="demo-run")
+
+    monkeypatch.setattr(
+        "dl_wandb.callbacks.wandb.wandb",
+        SimpleNamespace(
+            init=fake_init,
+            log=lambda *args, **kwargs: None,
+            finish=lambda: None,
+        ),
+    )
+
+    callback = WandbCallback(project=None, sweep_name=None)
+    callback.set_trainer(DummyTrainer())
+    callback.on_training_start()
+
+    assert init_calls[0]["project"] == "demo-project"

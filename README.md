@@ -69,8 +69,9 @@ uv run dl-run --config configs/base.yaml
 uv run dl-sweep --sweep experiments/lr_sweep.yaml
 ```
 
-The W&B tracker uses the sweep file name as the default sweep name, and that
-value becomes the W&B run group unless `tracking.sweep_name` overrides it.
+The W&B project defaults to the repository root name unless
+`tracking.experiment_name` overrides it. The sweep file name becomes the W&B
+run group unless `tracking.sweep_name` overrides it.
 
 ## What You Get
 

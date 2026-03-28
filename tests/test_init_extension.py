@@ -44,8 +44,10 @@ def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:
             ),
             Path("configs") / "base_sweep.yaml": (
                 "tracking:\n"
+                "  # experiment_name: demo\n"
+                "  # Optional tracker destination override. Defaults to the repository root name.\n"
                 "  # sweep_name: demo\n"
-                "  # Optional override. Defaults to the sweep filename.\n"
+                "  # Optional sweep grouping override. Defaults to the sweep filename.\n"
                 '  run_name_template: "lr_{optimizers.lr}"\n'
                 '  description_template: "learning_rate={optimizers.lr}"\n'
             ),
@@ -59,9 +61,13 @@ def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:
     assert '"deep-learning-wandb"' in context.get_file("pyproject.toml")
     assert "import dl_wandb" in context.get_file(Path("src") / "bootstrap.py")
     assert "backend: wandb" in context.get_file(Path("configs") / "base_sweep.yaml")
+    assert "# experiment_name: demo" in context.get_file(
+        Path("configs") / "base_sweep.yaml"
+    )
     assert "# sweep_name: demo" in context.get_file(
         Path("configs") / "base_sweep.yaml"
     )
     assert "callbacks:" in context.get_file(Path("configs") / "base.yaml")
     assert "sweep_name: null" in context.get_file(Path("configs") / "base.yaml")
+    assert "project:" not in context.get_file(Path("configs") / "base.yaml")
     assert "WANDB_API_KEY" in context.get_file(".env.example")
