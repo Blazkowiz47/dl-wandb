@@ -8,4 +8,4 @@ import dl_wandb
 def test_package_import_exposes_version() -> None:
     """The package root should import successfully and expose a version."""
 
-    assert dl_wandb.__version__ == "0.0.2a6"
+    assert dl_wandb.__version__ == "0.0.2a7"
