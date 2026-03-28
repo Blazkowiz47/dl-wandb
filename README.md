@@ -69,8 +69,8 @@ uv run dl-run --config configs/base.yaml
 uv run dl-sweep --sweep experiments/lr_sweep.yaml
 ```
 
-The W&B tracker uses the sweep file name as the run group, so repeated sweeps
-with different filenames show up as separate grouped runs in W&B.
+The W&B tracker uses the sweep file name as the default sweep name, and that
+value becomes the W&B run group unless `tracking.sweep_name` overrides it.
 
 ## What You Get
 

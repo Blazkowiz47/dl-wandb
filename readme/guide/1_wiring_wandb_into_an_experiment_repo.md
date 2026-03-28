@@ -29,5 +29,5 @@ The callback reads from both:
 - `callbacks.wandb` in `configs/base.yaml`
 - top-level `tracking` values from the generated run config
 
-That lets sweep-generated run names and groups flow through to W&B without
+That lets sweep-generated run names and sweep names flow through to W&B without
 hardcoding them inside the callback implementation.

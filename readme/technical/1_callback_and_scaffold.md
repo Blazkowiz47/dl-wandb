@@ -13,7 +13,7 @@ callback registration to happen before trainer setup.
 At runtime:
 
 - the callback initializes W&B once on the main process
-- it derives project, group, run name, and notes from callback params plus
+- it derives project, sweep name, run name, and notes from callback params plus
   top-level `tracking` and `runtime` config
 - it logs scalar epoch metrics through `wandb.log`
 - it closes the run on training end

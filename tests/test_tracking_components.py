@@ -17,8 +17,8 @@ def test_wandb_tracker_and_metrics_source_are_registered() -> None:
     assert METRICS_SOURCE_REGISTRY.is_registered("wandb")
 
 
-def test_wandb_tracker_injects_group_from_tracking_context() -> None:
-    """The W&B tracker should map tracking context into W&B group metadata."""
+def test_wandb_tracker_injects_sweep_name_from_tracking_context() -> None:
+    """The W&B tracker should map tracking context into sweep metadata."""
     tracker = TRACKER_REGISTRY.get("wandb")
     config: dict[str, object] = {}
 
@@ -31,14 +31,14 @@ def test_wandb_tracker_injects_group_from_tracking_context() -> None:
     assert config["tracking"] == {
         "backend": "wandb",
         "context": "demo-group",
-        "group": "demo-group",
+        "sweep_name": "demo-group",
         "run_name": "demo-run",
     }
 
 
-def test_wandb_tracker_setup_sweep_returns_group_context() -> None:
-    """The W&B tracker should derive one group name for the sweep."""
-    tracker = TRACKER_REGISTRY.get("wandb", {"group": "demo-group"})
+def test_wandb_tracker_setup_sweep_returns_sweep_name_context() -> None:
+    """The W&B tracker should derive one sweep name for the sweep."""
+    tracker = TRACKER_REGISTRY.get("wandb", {"sweep_name": "demo-group"})
     tracker_state = tracker.setup_sweep(
         experiment_name="demo-experiment",
         sweep_id="sweep-001",
@@ -49,8 +49,8 @@ def test_wandb_tracker_setup_sweep_returns_group_context() -> None:
     assert tracker_state == {"tracking_context": "demo-group"}
 
 
-def test_wandb_tracker_defaults_group_to_sweep_file_stem() -> None:
-    """The W&B tracker should use the sweep filename as the default group."""
+def test_wandb_tracker_defaults_sweep_name_to_sweep_file_stem() -> None:
+    """The W&B tracker should use the sweep filename as the default name."""
     tracker = TRACKER_REGISTRY.get("wandb")
     tracker_state = tracker.setup_sweep(
         experiment_name="demo-experiment",

@@ -15,7 +15,7 @@ def _wandb_callback_block() -> str:
   wandb:
     project: my_experiment
     entity: null
-    group: my_experiment
+    sweep_name: null
     job_type: train
     tags: []
     log_config: true

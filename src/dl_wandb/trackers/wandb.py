@@ -27,7 +27,7 @@ class WandbTracker(BaseTracker):
         tracking_uri: str | None = None,
         resume: bool = False,
     ) -> dict[str, Any]:
-        """Resolve the W&B group name used to tie sweep runs together."""
+        """Resolve the W&B sweep name used to tie sweep runs together."""
         del total_runs
         del tracking_uri
         del resume
@@ -35,16 +35,16 @@ class WandbTracker(BaseTracker):
         if tracking_context:
             return {"tracking_context": tracking_context}
 
-        configured_group = self.tracking_config.get("group")
-        if isinstance(configured_group, str) and configured_group:
-            return {"tracking_context": configured_group}
+        configured_sweep_name = self.tracking_config.get("sweep_name")
+        if isinstance(configured_sweep_name, str) and configured_sweep_name:
+            return {"tracking_context": configured_sweep_name}
 
         sweep_file = sweep_config.get("sweep_file")
         if isinstance(sweep_file, str) and sweep_file:
             return {"tracking_context": Path(sweep_file).stem}
 
-        group_name = f"{experiment_name}-{sweep_id}"
-        return {"tracking_context": str(group_name)}
+        derived_sweep_name = f"{experiment_name}-{sweep_id}"
+        return {"tracking_context": str(derived_sweep_name)}
 
     def inject_tracking_config(
         self,
@@ -63,7 +63,7 @@ class WandbTracker(BaseTracker):
         )
         tracking = config.setdefault("tracking", {})
         if tracking_context:
-            tracking["group"] = tracking_context
+            tracking["sweep_name"] = tracking_context
 
     def build_run_reference(
         self,
@@ -91,5 +91,5 @@ class WandbTracker(BaseTracker):
         if isinstance(entity, str) and entity:
             reference.setdefault("entity", entity)
         if tracking_context:
-            reference.setdefault("group", tracking_context)
+            reference.setdefault("sweep_name", tracking_context)
         return reference

@@ -67,7 +67,7 @@ class WandbCallback(Callback):
         self,
         project: str | None = None,
         entity: str | None = None,
-        group: str | None = None,
+        sweep_name: str | None = None,
         job_type: str = "train",
         tags: list[str] | None = None,
         notes: str | None = None,
@@ -77,7 +77,7 @@ class WandbCallback(Callback):
         super().__init__(
             project=project,
             entity=entity,
-            group=group,
+            sweep_name=sweep_name,
             job_type=job_type,
             tags=tags or [],
             notes=notes,
@@ -86,7 +86,7 @@ class WandbCallback(Callback):
         )
         self.project = project
         self.entity = entity
-        self.group = group
+        self.sweep_name = sweep_name
         self.job_type = job_type
         self.tags = tags or []
         self.notes = notes
@@ -109,7 +109,11 @@ class WandbCallback(Callback):
         init_kwargs = {
             "project": self.project or tracking.get("project") or experiment.get("name"),
             "entity": self.entity or tracking.get("entity"),
-            "group": self.group or tracking.get("group") or tracking.get("context"),
+            "group": (
+                self.sweep_name
+                or tracking.get("sweep_name")
+                or tracking.get("context")
+            ),
             "name": tracking.get("run_name") or runtime.get("name"),
             "job_type": self.job_type,
             "tags": tags or None,
@@ -147,7 +151,7 @@ class WandbCallback(Callback):
             "backend": "wandb",
             "entity": getattr(self.run, "entity", None),
             "project": getattr(self.run, "project", None),
-            "group": getattr(self.run, "group", None),
+            "sweep_name": getattr(self.run, "group", None),
             "run_id": getattr(self.run, "id", None),
             "run_name": getattr(self.run, "name", None),
             "url": getattr(self.run, "url", None),

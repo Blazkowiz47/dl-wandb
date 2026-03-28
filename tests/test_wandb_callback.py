@@ -33,7 +33,7 @@ class DummyTrainer:
                 "description": "demo-description",
             },
             "tracking": {
-                "group": "demo-group",
+                "sweep_name": "demo-group",
                 "run_name": "demo-run",
                 "description": "tracking-description",
             },
@@ -80,10 +80,10 @@ def test_wandb_callback_initializes_logs_and_finishes(
     assert finish_calls == [True]
 
 
-def test_wandb_callback_uses_tracking_context_as_group(
+def test_wandb_callback_uses_tracking_context_as_sweep_name(
     monkeypatch: MonkeyPatch,
 ) -> None:
-    """The callback should fall back to tracking context when group is unset."""
+    """The callback should fall back to tracking context when unset."""
 
     init_calls: list[dict] = []
 
@@ -96,7 +96,7 @@ def test_wandb_callback_uses_tracking_context_as_group(
         SimpleNamespace(init=fake_init, log=lambda *args, **kwargs: None, finish=lambda: None),
     )
 
-    callback = WandbCallback(project="demo-project", group=None)
+    callback = WandbCallback(project="demo-project", sweep_name=None)
     trainer = DummyTrainer()
     trainer.config["tracking"] = {
         "context": "fallback-group",
