@@ -66,7 +66,7 @@ uv init
 uv add deep-learning-wandb
 uv run dl-init-experiment --root-dir . --with-wandb
 uv run dl-run --config configs/base.yaml
-uv run dl-sweep --sweep experiments/lr_sweep.yaml
+uv run dl-sweep experiments/lr_sweep.yaml
 ```
 
 The W&B project defaults to the repository root name unless
