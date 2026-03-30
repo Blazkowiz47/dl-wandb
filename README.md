@@ -9,10 +9,7 @@ framework while still allowing users to install it through
 
 ## Install
 
-The package is now available on PyPI under the `deep-learning-wandb` name.
-TestPyPI remains available for validation flows.
-
-PyPI install target:
+Install from PyPI through the core extra:
 
 ```bash
 pip install "deep-learning-core[wandb]"
@@ -24,7 +21,7 @@ Install the package directly:
 pip install deep-learning-wandb
 ```
 
-Current TestPyPI + `uv` projects should add both direct dependencies:
+Install in a `uv` project:
 
 ```bash
 uv add "deep-learning-core[wandb]" deep-learning-wandb
