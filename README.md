@@ -30,7 +30,7 @@ uv add "deep-learning-core[wandb]" deep-learning-wandb
 ## Scope
 
 - W&B callback registration for `deep-learning-core`
-- Experiment scaffold integration through `dl-init-experiment --with-wandb`
+- Experiment scaffold integration through `dl-init --with-wandb`
 - W&B-ready config defaults for generated experiment repositories
 
 ## Out Of Scope
@@ -50,7 +50,7 @@ uv add "deep-learning-core[wandb]" deep-learning-wandb
 Then scaffold a W&B-ready experiment repository:
 
 ```bash
-uv run dl-init-experiment --name my-exp --with-wandb
+uv run dl-init --name my-exp --with-wandb
 ```
 
 The generated experiment package will import `dl_wandb` automatically so the
@@ -61,7 +61,7 @@ Concrete experiment flow:
 ```bash
 uv init
 uv add deep-learning-wandb
-uv run dl-init-experiment --root-dir . --with-wandb
+uv run dl-init --root-dir . --with-wandb
 uv run dl-run --config configs/base.yaml
 uv run dl-sweep experiments/lr_sweep.yaml
 ```
@@ -73,7 +73,7 @@ run group unless `tracking.sweep_name` overrides it.
 ## What You Get
 
 - the `wandb` callback for local training runs
-- `dl-init-experiment --with-wandb` scaffold support
+- `dl-init --with-wandb` scaffold support
 - generated W&B callback defaults and `.env.example`
 
 ## Companion Packages

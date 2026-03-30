@@ -9,7 +9,7 @@ uv add "dl-core[wandb]"
 Create a new experiment repository with W&B wiring:
 
 ```bash
-uv run dl-init-experiment --name my-exp --with-wandb
+uv run dl-init --name my-exp --with-wandb
 ```
 
 Then:

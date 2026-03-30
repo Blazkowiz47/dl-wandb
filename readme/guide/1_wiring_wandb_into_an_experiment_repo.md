@@ -1,7 +1,7 @@
 # Wiring W&B Into An Experiment Repo
 
 The W&B extension is designed to stay outside `dl-core`, but still work through
-the normal `dl-init-experiment` flow.
+the normal `dl-init` flow.
 
 ## Install
 
@@ -12,7 +12,7 @@ uv add "dl-core[wandb]"
 ## Scaffold
 
 ```bash
-uv run dl-init-experiment --name my-exp --with-wandb
+uv run dl-init --name my-exp --with-wandb
 ```
 
 That adds:

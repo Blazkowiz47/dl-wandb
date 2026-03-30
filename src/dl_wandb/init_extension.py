@@ -1,4 +1,4 @@
-"""W&B scaffold extension for dl-init-experiment."""
+"""W&B scaffold extension for dl-init."""
 
 from __future__ import annotations
 
