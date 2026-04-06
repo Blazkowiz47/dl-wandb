@@ -5,12 +5,33 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from dl_core.core import BaseTracker, register_tracker
+from dl_core.core import BaseTracker, config_field, register_tracker
 
 
 @register_tracker("wandb")
 class WandbTracker(BaseTracker):
     """Tracker metadata adapter for W&B-backed runs."""
+
+    CONFIG_FIELDS = BaseTracker.CONFIG_FIELDS + [
+        config_field(
+            "project",
+            "str | None",
+            "Weights & Biases project name override.",
+            default=None,
+        ),
+        config_field(
+            "entity",
+            "str | None",
+            "Weights & Biases entity or team name.",
+            default=None,
+        ),
+        config_field(
+            "sweep_name",
+            "str | None",
+            "Optional W&B group name used to tie sweep runs together.",
+            default=None,
+        ),
+    ]
 
     def get_backend_name(self) -> str:
         """Return the tracker backend name."""

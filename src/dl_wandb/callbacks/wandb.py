@@ -9,6 +9,7 @@ import torch
 import wandb
 
 from dl_core.core.base_callback import Callback
+from dl_core.core.config_metadata import config_field
 from dl_core.core.registry import register_callback
 
 
@@ -62,6 +63,51 @@ def _extract_scalars(logs: dict[str, Any] | None) -> dict[str, float]:
 @register_callback("wandb")
 class WandbCallback(Callback):
     """Log training metadata and epoch metrics to Weights & Biases."""
+
+    CONFIG_FIELDS = Callback.CONFIG_FIELDS + [
+        config_field(
+            "project",
+            "str | None",
+            "Weights & Biases project name override.",
+            default=None,
+        ),
+        config_field(
+            "entity",
+            "str | None",
+            "Weights & Biases entity or team name.",
+            default=None,
+        ),
+        config_field(
+            "sweep_name",
+            "str | None",
+            "Optional W&B group name used to organize sweep runs.",
+            default=None,
+        ),
+        config_field(
+            "job_type",
+            "str",
+            "W&B job type label for the run.",
+            default="train",
+        ),
+        config_field(
+            "tags",
+            "list[str] | None",
+            "Optional W&B tags attached to the run.",
+            default=None,
+        ),
+        config_field(
+            "notes",
+            "str | None",
+            "Optional W&B run notes.",
+            default=None,
+        ),
+        config_field(
+            "log_config",
+            "bool",
+            "Attach the trainer config to the W&B run on start.",
+            default=True,
+        ),
+    ]
 
     def __init__(
         self,
