@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "deep-learning-wandb"
-version = "0.0.7"
+version = "0.0.8"
 description = "Weights & Biases integration layer for dl-core."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
-    "deep-learning-core>=0.0.14,<0.1",
+    "deep-learning-core>=0.0.17,<0.1",
     "wandb",
 ]
 
