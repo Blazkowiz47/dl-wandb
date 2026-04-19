@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from types import SimpleNamespace
 
 from pytest import MonkeyPatch
@@ -12,7 +13,7 @@ from dl_core.core import METRICS_SOURCE_REGISTRY, TRACKER_REGISTRY
 
 def test_wandb_tracker_and_metrics_source_are_registered() -> None:
     """Importing dl-wandb should register tracker and metrics source aliases."""
-    assert dl_wandb.__version__ == "0.0.8"
+    assert dl_wandb.__version__ == "0.0.9"
     assert TRACKER_REGISTRY.is_registered("wandb")
     assert METRICS_SOURCE_REGISTRY.is_registered("wandb")
 
@@ -105,3 +106,58 @@ def test_wandb_metrics_source_prefers_remote_summary(
     assert run_record["wandb_url"] == (
         "https://wandb.example/demo-entity/demo-project/wandb-run-123"
     )
+
+
+def test_wandb_metrics_source_normalizes_nested_summary_objects(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    """The W&B metrics source should normalize nested summary objects."""
+    source = METRICS_SOURCE_REGISTRY.get("wandb")
+
+    class FakeSummarySubDict:
+        def __init__(self, payload: dict[str, object]) -> None:
+            self.payload = payload
+
+        def items(self):
+            return self.payload.items()
+
+    monkeypatch.setattr(
+        "dl_wandb.metrics_sources.wandb.wandb",
+        SimpleNamespace(
+            Api=lambda: SimpleNamespace(
+                run=lambda path: SimpleNamespace(
+                    summary={
+                        "validation/accuracy": 0.93,
+                        "_wandb": FakeSummarySubDict(
+                            {"runtime": FakeSummarySubDict({"seconds": 12})}
+                        ),
+                    },
+                    name="demo-run",
+                    url=f"https://wandb.example/{path}",
+                )
+            )
+        ),
+    )
+
+    run_record = source.collect_run(
+        run_index=0,
+        run_data={
+            "tracking_run_id": "wandb-run-123",
+            "tracking_run_name": "demo-run",
+            "tracking_backend": "wandb",
+            "metrics_source_backend": "wandb",
+            "tracking_run_ref": {
+                "backend": "wandb",
+                "entity": "demo-entity",
+                "project": "demo-project",
+                "run_id": "wandb-run-123",
+                "run_name": "demo-run",
+            },
+            "status": "completed",
+        },
+        sweep_data={"tracking_backend": "wandb"},
+    )
+
+    assert run_record["final_metrics"]["validation/accuracy"] == 0.93
+    assert run_record["final_metrics"]["_wandb"] == {"runtime": {"seconds": 12}}
+    json.dumps([run_record], indent=2)

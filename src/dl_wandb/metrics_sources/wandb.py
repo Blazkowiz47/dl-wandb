@@ -10,6 +10,26 @@ from dl_core.core import register_metrics_source
 from dl_core.metrics_sources.local import LocalMetricsSource
 
 
+def _to_json_safe(value: Any) -> Any:
+    """Convert W&B summary values into JSON-serializable data."""
+    if hasattr(value, "items") and callable(value.items):
+        try:
+            return {str(key): _to_json_safe(item) for key, item in value.items()}
+        except Exception:
+            return str(value)
+    if isinstance(value, (list, tuple, set)):
+        return [_to_json_safe(item) for item in value]
+    item = getattr(value, "item", None)
+    if callable(item):
+        try:
+            return item()
+        except Exception:
+            pass
+    if isinstance(value, (str, int, float, bool)) or value is None:
+        return value
+    return str(value)
+
+
 @register_metrics_source("wandb")
 class WandbMetricsSource(LocalMetricsSource):
     """Read W&B-backed sweep results with local artifact fallback."""
@@ -39,7 +59,9 @@ class WandbMetricsSource(LocalMetricsSource):
             local_record["metrics_source_warning"] = str(exc)
             return local_record
 
-        summary = dict(getattr(run, "summary", {}))
+        summary = _to_json_safe(getattr(run, "summary", {}))
+        if not isinstance(summary, dict):
+            summary = {}
         merged_final = dict(summary)
         merged_final.update(local_record.get("final_metrics", {}))
 
