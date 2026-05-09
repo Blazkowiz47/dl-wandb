@@ -56,13 +56,26 @@ class WandbInitExtension(InitExtension):
 
     name = "wandb"
 
+    def display_name(self) -> str:
+        """Return the prompt label for W&B support."""
+        return "W&B"
+
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         """Register the W&B scaffold flag."""
-
-        parser.add_argument(
+        group = parser.add_mutually_exclusive_group()
+        group.add_argument(
             "--with-wandb",
+            dest="with_wandb",
             action="store_true",
+            default=None,
             help="Include W&B callback wiring and tracking defaults.",
+        )
+        group.add_argument(
+            "--without-wandb",
+            dest="with_wandb",
+            action="store_false",
+            default=None,
+            help="Exclude W&B scaffold wiring even when dl-wandb is installed.",
         )
 
     def is_enabled(
@@ -73,7 +86,7 @@ class WandbInitExtension(InitExtension):
         """Enable W&B wiring when explicitly requested."""
 
         del discovered_extensions
-        return bool(getattr(args, "with_wandb", False))
+        return self.selection_state(args) is True
 
     def apply(self, context: ScaffoldContext) -> None:
         """Apply W&B-specific scaffold mutations."""
