@@ -7,6 +7,9 @@ Public Weights & Biases integration layer for `deep-learning-core`.
 framework while still allowing users to install it through
 `deep-learning-core[wandb]`.
 
+Current release: `deep-learning-wandb==0.0.11`.
+Requires `deep-learning-core>=0.0.24,<0.1`.
+
 ## Install
 
 Install from PyPI through the core extra:
