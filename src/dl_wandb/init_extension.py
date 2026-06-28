@@ -21,14 +21,6 @@ def _wandb_callback_block() -> str:
 """
 
 
-def _wandb_tracking_fields() -> str:
-    """Render W&B-specific additions to the sweep tracking block."""
-
-    return """  backend: wandb
-  entity: null
-"""
-
-
 def _inject_wandb_tracking_fields(content: str) -> str:
     """Inject W&B-specific tracking fields into the sweep scaffold."""
 
@@ -40,15 +32,9 @@ def _inject_wandb_tracking_fields(content: str) -> str:
 
     return content.replace(
         "tracking:\n",
-        f"tracking:\n{_wandb_tracking_fields()}",
+        "tracking:\n  backend: wandb\n  entity: null\n",
         1,
     )
-
-
-def _env_example() -> str:
-    """Render a minimal environment example for W&B auth."""
-
-    return "WANDB_API_KEY=<your-wandb-api-key>\n"
 
 
 class WandbInitExtension(InitExtension):
@@ -115,4 +101,4 @@ class WandbInitExtension(InitExtension):
                 context.get_file(Path("configs") / "base_sweep.yaml")
             ),
         )
-        context.set_file(".env.example", _env_example())
+        context.set_file(".env.example", "WANDB_API_KEY=<your-wandb-api-key>\n")
