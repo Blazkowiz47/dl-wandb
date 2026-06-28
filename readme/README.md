@@ -1,7 +1,7 @@
 # dl-wandb Documentation
 
-Current public release: `deep-learning-wandb==0.0.11`, requiring
-`deep-learning-core>=0.0.24,<0.1`.
+Current public release: `deep-learning-wandb==0.0.12`, requiring
+`deep-learning-core>=0.0.25,<0.1`.
 
 - [`dl-core`](https://github.com/Blazkowiz47/dl-core)
 - [`dl-azure`](https://github.com/Blazkowiz47/dl-azure)
