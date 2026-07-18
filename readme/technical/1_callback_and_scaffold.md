@@ -20,3 +20,7 @@ At runtime:
   top-level `tracking` and `runtime` config
 - it logs scalar epoch metrics through `wandb.log`
 - it closes the run on training end
+
+Sweep analysis also maps terminal W&B run states into the common analyzer
+statuses, so remotely finished runs become `completed` and crashed, failed,
+killed, or preempted runs become `failed`.

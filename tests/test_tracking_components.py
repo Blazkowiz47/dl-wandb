@@ -76,6 +76,7 @@ def test_wandb_metrics_source_prefers_remote_summary(
                 run=lambda path: SimpleNamespace(
                     summary={"validation/accuracy": 0.93},
                     name="demo-run",
+                    state="finished",
                     url=f"https://wandb.example/{path}",
                 )
             )
@@ -96,16 +97,27 @@ def test_wandb_metrics_source_prefers_remote_summary(
                 "run_id": "wandb-run-123",
                 "run_name": "demo-run",
             },
-            "status": "completed",
+            "status": "running",
         },
         sweep_data={"tracking_backend": "wandb"},
     )
 
     assert run_record["remote_summary_available"] is True
     assert run_record["final_metrics"]["validation/accuracy"] == 0.93
+    assert run_record["status"] == "completed"
     assert run_record["wandb_url"] == (
         "https://wandb.example/demo-entity/demo-project/wandb-run-123"
     )
+
+
+def test_wandb_metrics_source_maps_remote_failure_states() -> None:
+    """Terminal W&B failure states should produce failed analyzer records."""
+    source = METRICS_SOURCE_REGISTRY.get("wandb")
+
+    assert source._map_run_state("crashed") == "failed"
+    assert source._map_run_state("killed") == "failed"
+    assert source._map_run_state("preempted") == "failed"
+    assert source._map_run_state("running") == "running"
 
 
 def test_wandb_metrics_source_normalizes_nested_summary_objects(

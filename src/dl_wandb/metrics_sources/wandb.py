@@ -76,6 +76,11 @@ class WandbMetricsSource(LocalMetricsSource):
         )
         local_record["wandb_url"] = getattr(run, "url", None)
 
+        if local_record.get("status") in {"unknown", "running"}:
+            remote_status = self._map_run_state(getattr(run, "state", None))
+            if remote_status is not None:
+                local_record["status"] = remote_status
+
         selection_metric = local_record.get("selection_metric")
         if (
             not isinstance(local_record.get("selection_value"), (int, float))
@@ -88,6 +93,17 @@ class WandbMetricsSource(LocalMetricsSource):
             )
 
         return local_record
+
+    def _map_run_state(self, state: str | None) -> str | None:
+        """Map W&B run states into analyzer statuses."""
+        if not isinstance(state, str) or not state:
+            return None
+        normalized_state = state.casefold()
+        if normalized_state == "finished":
+            return "completed"
+        if normalized_state in {"crashed", "failed", "killed", "preempted"}:
+            return "failed"
+        return "running"
 
     def _resolve_remote_metric(
         self,
