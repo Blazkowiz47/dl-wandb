@@ -8,6 +8,22 @@ from pathlib import Path
 from dl_core.init_extensions import InitExtension, ScaffoldContext
 
 
+def _append_gitignore_patterns(
+    context: ScaffoldContext,
+    *patterns: str,
+) -> None:
+    """Append W&B runtime and secret patterns to the project gitignore."""
+    relative = Path(".gitignore")
+    content = context.files.get(relative, "")
+    existing_lines = set(content.splitlines())
+    missing = [pattern for pattern in patterns if pattern not in existing_lines]
+    if not missing:
+        return
+    prefix = content.rstrip()
+    suffix = "\n".join(missing)
+    context.set_file(relative, f"{prefix}\n{suffix}\n" if prefix else f"{suffix}\n")
+
+
 def _wandb_callback_block() -> str:
     """Render the scaffold callback block for W&B logging."""
 
@@ -77,12 +93,14 @@ class WandbInitExtension(InitExtension):
     def apply(self, context: ScaffoldContext) -> None:
         """Apply W&B-specific scaffold mutations."""
 
-        context.replace_in_file(
-            "pyproject.toml",
-            '"deep-learning-core"',
-            '"deep-learning-core[wandb]"',
-        )
         context.add_dependency("deep-learning-wandb")
+        _append_gitignore_patterns(
+            context,
+            ".env",
+            ".env.*",
+            "!.env.example",
+            "wandb/",
+        )
         context.append_bootstrap_import("import dl_wandb  # noqa: F401")
         context.append_readme_note(
             "W&B support is enabled. Run `wandb login` and review the "

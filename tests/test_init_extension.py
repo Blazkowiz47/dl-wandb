@@ -57,8 +57,10 @@ def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:
 
     WandbInitExtension().apply(context)
 
-    assert '"deep-learning-core[wandb]"' in context.get_file("pyproject.toml")
-    assert '"deep-learning-wandb"' in context.get_file("pyproject.toml")
+    pyproject_text = context.get_file("pyproject.toml")
+    assert '"deep-learning-core"' in pyproject_text
+    assert '"deep-learning-core[wandb]"' not in pyproject_text
+    assert '"deep-learning-wandb"' in pyproject_text
     assert "import dl_wandb" in context.get_file(Path("src") / "bootstrap.py")
     assert "backend: wandb" in context.get_file(Path("configs") / "base_sweep.yaml")
     assert "# experiment_name: demo" in context.get_file(
@@ -71,3 +73,8 @@ def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:
     assert "sweep_name: null" in context.get_file(Path("configs") / "base.yaml")
     assert "project:" not in context.get_file(Path("configs") / "base.yaml")
     assert "WANDB_API_KEY" in context.get_file(".env.example")
+    gitignore_text = context.get_file(".gitignore")
+    assert ".env" in gitignore_text
+    assert ".env.*" in gitignore_text
+    assert "!.env.example" in gitignore_text
+    assert "wandb/" in gitignore_text

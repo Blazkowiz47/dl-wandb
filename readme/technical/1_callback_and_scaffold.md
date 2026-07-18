@@ -10,6 +10,9 @@ The init extension makes the generated experiment repository import
 `dl_wandb` from `src/bootstrap.py`. That import causes the package-level
 callback registration to happen before trainer setup.
 
+It also creates `.env.example` while ignoring real environment files and local
+`wandb/` run data.
+
 At runtime:
 
 - the callback initializes W&B once on the main process

@@ -6,7 +6,7 @@ the normal `dl-init` flow.
 ## Install
 
 ```bash
-uv add "dl-core[wandb]"
+uv add "deep-learning-core[wandb]"
 ```
 
 ## Scaffold
@@ -21,6 +21,7 @@ That adds:
 - a `wandb` callback block in `configs/base.yaml`
 - W&B tracking fields in `configs/base_sweep.yaml`
 - `.env.example` with a `WANDB_API_KEY` placeholder
+- `.gitignore` entries for local `.env` files and `wandb/` run data
 
 ## Runtime
 

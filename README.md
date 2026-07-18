@@ -27,7 +27,7 @@ pip install deep-learning-wandb
 Install in a `uv` project:
 
 ```bash
-uv add "deep-learning-core[wandb]" deep-learning-wandb
+uv add "deep-learning-core[wandb]"
 ```
 
 ## Scope
@@ -47,7 +47,7 @@ uv add "deep-learning-core[wandb]" deep-learning-wandb
 Install it through the `deep-learning-core` extra:
 
 ```bash
-uv add "deep-learning-core[wandb]" deep-learning-wandb
+uv add "deep-learning-core[wandb]"
 ```
 
 Then scaffold a W&B-ready experiment repository:
@@ -58,6 +58,8 @@ uv run dl-init --name my-exp --with-wandb
 
 The generated experiment package will import `dl_wandb` automatically so the
 `wandb` callback registers at runtime.
+It also ignores `.env`, other local environment files, and `wandb/`, while
+keeping `.env.example` available as the credential template.
 
 Concrete experiment flow:
 
@@ -87,7 +89,7 @@ run group unless `tracking.sweep_name` overrides it.
 
 ## Documentation
 
-- [Documentation Index](https://github.com/Blazkowiz47/dl-wandb/tree/main/readme)
+- [Documentation Index](https://github.com/Blazkowiz47/dl-wandb/tree/master/readme)
 - [GitHub Repository](https://github.com/Blazkowiz47/dl-wandb)
 
 ## License

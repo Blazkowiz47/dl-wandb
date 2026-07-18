@@ -3,7 +3,7 @@
 Install the extension through `dl-core`:
 
 ```bash
-uv add "dl-core[wandb]"
+uv add "deep-learning-core[wandb]"
 ```
 
 Create a new experiment repository with W&B wiring:
