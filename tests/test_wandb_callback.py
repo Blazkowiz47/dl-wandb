@@ -47,7 +47,7 @@ def test_wandb_callback_initializes_logs_and_finishes(
     """The W&B callback should initialize, log scalars, and finish cleanly."""
 
     init_calls: list[dict] = []
-    log_calls: list[tuple[dict, int]] = []
+    log_calls: list[tuple[dict, int | None]] = []
     finish_calls: list[bool] = []
 
     fake_run = SimpleNamespace(name="demo-run")
@@ -56,7 +56,7 @@ def test_wandb_callback_initializes_logs_and_finishes(
         init_calls.append(kwargs)
         return fake_run
 
-    def fake_log(payload, step):
+    def fake_log(payload, step=None):
         log_calls.append((payload, step))
 
     def fake_finish():
@@ -72,12 +72,23 @@ def test_wandb_callback_initializes_logs_and_finishes(
 
     callback.on_training_start()
     callback.on_epoch_end(0, {"train_loss": 0.5, "note": "ignored"})
+    callback.on_episode_end(2, {"episode/return": 4.5, "global_step": 20})
+    callback.on_update_end(3, {"sac/critic_loss": 0.2, "global_step": 21})
+    callback.on_evaluation_end(
+        21,
+        {"evaluation/mean_return": 5.0, "global_step": 21},
+    )
     callback.on_training_end()
 
     assert init_calls[0]["project"] == "demo-project"
     assert init_calls[0]["group"] == "demo-group"
     assert init_calls[0]["name"] == "demo-run"
-    assert log_calls == [({"train_loss": 0.5}, 1)]
+    assert log_calls == [
+        ({"train_loss": 0.5}, 1),
+        ({"episode/return": 4.5, "global_step": 20.0}, None),
+        ({"sac/critic_loss": 0.2, "global_step": 21.0}, None),
+        ({"evaluation/mean_return": 5.0, "global_step": 21.0}, None),
+    ]
     assert finish_calls == [True]
 
 

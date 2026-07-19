@@ -78,6 +78,7 @@ run group unless `tracking.sweep_name` overrides it.
 ## What You Get
 
 - the `wandb` callback for local training runs
+- epoch, RL episode, algorithm-update, and evaluation metric logging
 - `dl-init --with-wandb` scaffold support
 - generated W&B callback defaults and `.env.example`
 

@@ -222,6 +222,62 @@ class WandbCallback(Callback):
         if scalars:
             wandb.log(scalars, step=epoch + 1)
 
+    def on_episode_end(
+        self,
+        episode: int,
+        logs: dict[str, Any] | None = None,
+    ) -> None:
+        """Log metrics after an RL episode."""
+        self._on_episode_end(episode, logs)
+
+    def _on_episode_end(
+        self,
+        episode: int,
+        logs: dict[str, Any] | None = None,
+    ) -> None:
+        del episode
+        self._log_rl_metrics(logs)
+
+    def on_update_end(
+        self,
+        update: int,
+        logs: dict[str, Any] | None = None,
+    ) -> None:
+        """Log metrics after an RL algorithm update."""
+        self._on_update_end(update, logs)
+
+    def _on_update_end(
+        self,
+        update: int,
+        logs: dict[str, Any] | None = None,
+    ) -> None:
+        del update
+        self._log_rl_metrics(logs)
+
+    def on_evaluation_end(
+        self,
+        step: int,
+        logs: dict[str, Any] | None = None,
+    ) -> None:
+        """Log metrics after an RL evaluation group."""
+        self._on_evaluation_end(step, logs)
+
+    def _on_evaluation_end(
+        self,
+        step: int,
+        logs: dict[str, Any] | None = None,
+    ) -> None:
+        del step
+        self._log_rl_metrics(logs)
+
+    def _log_rl_metrics(self, logs: dict[str, Any] | None) -> None:
+        """Log RL scalars in callback order while retaining global_step."""
+        if not self.is_main_process() or self.run is None:
+            return
+        scalars = _extract_scalars(logs)
+        if scalars:
+            wandb.log(scalars)
+
     def on_training_end(self, logs: dict[str, Any] | None = None) -> None:
         """Close the active W&B run at the end of training."""
 
