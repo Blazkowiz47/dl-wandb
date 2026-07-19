@@ -138,6 +138,8 @@ class WandbCallback(Callback):
         self.notes = notes
         self.log_config = log_config
         self.run: Any | None = None
+        self._rl_step_metric_defined = False
+        self._rl_metric_names: set[str] = set()
 
     def _resolve_run_init_kwargs(self) -> dict[str, Any]:
         """Build W&B init kwargs from callback and trainer config."""
@@ -186,6 +188,8 @@ class WandbCallback(Callback):
             return
 
         self.run = wandb.init(**self._resolve_run_init_kwargs())
+        self._rl_step_metric_defined = False
+        self._rl_metric_names.clear()
         self._write_tracking_session()
 
     def _write_tracking_session(self) -> None:
@@ -235,8 +239,9 @@ class WandbCallback(Callback):
         episode: int,
         logs: dict[str, Any] | None = None,
     ) -> None:
-        del episode
-        self._log_rl_metrics(logs)
+        if logs and logs.get("phase") == "evaluation":
+            return
+        self._log_rl_metrics(logs, fallback_step=episode)
 
     def on_update_end(
         self,
@@ -251,8 +256,7 @@ class WandbCallback(Callback):
         update: int,
         logs: dict[str, Any] | None = None,
     ) -> None:
-        del update
-        self._log_rl_metrics(logs)
+        self._log_rl_metrics(logs, fallback_step=update)
 
     def on_evaluation_end(
         self,
@@ -267,16 +271,30 @@ class WandbCallback(Callback):
         step: int,
         logs: dict[str, Any] | None = None,
     ) -> None:
-        del step
-        self._log_rl_metrics(logs)
+        self._log_rl_metrics(logs, fallback_step=step)
 
-    def _log_rl_metrics(self, logs: dict[str, Any] | None) -> None:
-        """Log RL scalars in callback order while retaining global_step."""
+    def _log_rl_metrics(
+        self,
+        logs: dict[str, Any] | None,
+        *,
+        fallback_step: int,
+    ) -> None:
+        """Log RL scalars against the environment-transition counter."""
         if not self.is_main_process() or self.run is None:
             return
         scalars = _extract_scalars(logs)
-        if scalars:
-            wandb.log(scalars)
+        if not scalars:
+            return
+        scalars.setdefault("global_step", float(fallback_step))
+        if not self._rl_step_metric_defined:
+            wandb.define_metric("global_step")
+            self._rl_step_metric_defined = True
+        for metric_name in scalars:
+            if metric_name == "global_step" or metric_name in self._rl_metric_names:
+                continue
+            wandb.define_metric(metric_name, step_metric="global_step")
+            self._rl_metric_names.add(metric_name)
+        wandb.log(scalars)
 
     def on_training_end(self, logs: dict[str, Any] | None = None) -> None:
         """Close the active W&B run at the end of training."""

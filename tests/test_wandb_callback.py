@@ -48,6 +48,7 @@ def test_wandb_callback_initializes_logs_and_finishes(
 
     init_calls: list[dict] = []
     log_calls: list[tuple[dict, int | None]] = []
+    metric_calls: list[tuple[str, str | None]] = []
     finish_calls: list[bool] = []
 
     fake_run = SimpleNamespace(name="demo-run")
@@ -64,7 +65,14 @@ def test_wandb_callback_initializes_logs_and_finishes(
 
     monkeypatch.setattr(
         "dl_wandb.callbacks.wandb.wandb",
-        SimpleNamespace(init=fake_init, log=fake_log, finish=fake_finish),
+        SimpleNamespace(
+            init=fake_init,
+            define_metric=lambda name, step_metric=None: metric_calls.append(
+                (name, step_metric)
+            ),
+            log=fake_log,
+            finish=fake_finish,
+        ),
     )
 
     callback = WandbCallback(project="demo-project")
@@ -73,6 +81,10 @@ def test_wandb_callback_initializes_logs_and_finishes(
     callback.on_training_start()
     callback.on_epoch_end(0, {"train_loss": 0.5, "note": "ignored"})
     callback.on_episode_end(2, {"episode/return": 4.5, "global_step": 20})
+    callback.on_episode_end(
+        200,
+        {"phase": "evaluation", "episode/return": 99.0, "global_step": 20},
+    )
     callback.on_update_end(3, {"sac/critic_loss": 0.2, "global_step": 21})
     callback.on_evaluation_end(
         21,
@@ -88,6 +100,12 @@ def test_wandb_callback_initializes_logs_and_finishes(
         ({"episode/return": 4.5, "global_step": 20.0}, None),
         ({"sac/critic_loss": 0.2, "global_step": 21.0}, None),
         ({"evaluation/mean_return": 5.0, "global_step": 21.0}, None),
+    ]
+    assert metric_calls == [
+        ("global_step", None),
+        ("episode/return", "global_step"),
+        ("sac/critic_loss", "global_step"),
+        ("evaluation/mean_return", "global_step"),
     ]
     assert finish_calls == [True]
 
