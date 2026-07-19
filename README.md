@@ -10,6 +10,15 @@ framework while still allowing users to install it through
 Current release: `deep-learning-wandb==0.0.12`.
 Requires `deep-learning-core>=0.0.25,<0.1`.
 
+## What's New in 0.0.13?
+
+- RL episode, algorithm-update, and evaluation metrics are logged against the
+  environment-transition `global_step`
+- evaluation episodes remain separate from training-episode metric series
+- remote W&B run states map cleanly into sweep-analysis completion status
+- generated repositories depend directly on `deep-learning-wandb`, ignore W&B
+  runtime output and local environment files, and retain `.env.example`
+
 ## Install
 
 Install from PyPI through the core extra:
