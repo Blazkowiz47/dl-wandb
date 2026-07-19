@@ -7,8 +7,8 @@ Public Weights & Biases integration layer for `deep-learning-core`.
 framework while still allowing users to install it through
 `deep-learning-core[wandb]`.
 
-Current release: `deep-learning-wandb==0.0.12`.
-Requires `deep-learning-core>=0.0.25,<0.1`.
+Current release: `deep-learning-wandb==0.0.13`.
+Requires `deep-learning-core>=0.0.26,<0.1`.
 
 ## What's New in 0.0.13?
 
