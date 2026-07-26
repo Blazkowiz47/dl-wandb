@@ -19,6 +19,8 @@ Requires `deep-learning-core>=0.0.26,<0.1`.
 - generated repositories depend directly on `deep-learning-wandb`, ignore W&B
   runtime output and local environment files, and retain `.env.example`
 
+Previous versions are recorded in the [release history](RELEASES.md).
+
 ## Install
 
 Install from PyPI through the core extra:
