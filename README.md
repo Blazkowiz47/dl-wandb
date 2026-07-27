@@ -7,17 +7,15 @@ Public Weights & Biases integration layer for `deep-learning-core`.
 framework while still allowing users to install it through
 `deep-learning-core[wandb]`.
 
-Current release: `deep-learning-wandb==0.0.13`.
-Requires `deep-learning-core>=0.0.26,<0.1`.
+Current release: `deep-learning-wandb==0.0.14`.
+Requires `deep-learning-core>=0.0.34,<0.1`.
 
-## What's New in 0.0.13?
+## What's New in 0.0.14?
 
-- RL episode, algorithm-update, and evaluation metrics are logged against the
-  environment-transition `global_step`
-- evaluation episodes remain separate from training-episode metric series
-- remote W&B run states map cleanly into sweep-analysis completion status
-- generated repositories depend directly on `deep-learning-wandb`, ignore W&B
-  runtime output and local environment files, and retain `.env.example`
+- W&B now implements the public RL callback hooks `on_episode_end()`,
+  `on_update_end()`, and `on_evaluation_end()`
+- custom callbacks can subclass the integration without relying on private
+  underscore methods
 
 Previous versions are recorded in the [release history](RELEASES.md).
 

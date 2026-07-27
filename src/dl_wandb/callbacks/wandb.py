@@ -231,14 +231,7 @@ class WandbCallback(Callback):
         episode: int,
         logs: dict[str, Any] | None = None,
     ) -> None:
-        """Log metrics after an RL episode."""
-        self._on_episode_end(episode, logs)
-
-    def _on_episode_end(
-        self,
-        episode: int,
-        logs: dict[str, Any] | None = None,
-    ) -> None:
+        """Log one completed training episode."""
         if logs and logs.get("phase") == "evaluation":
             return
         self._log_rl_metrics(logs, fallback_step=episode)
@@ -248,14 +241,7 @@ class WandbCallback(Callback):
         update: int,
         logs: dict[str, Any] | None = None,
     ) -> None:
-        """Log metrics after an RL algorithm update."""
-        self._on_update_end(update, logs)
-
-    def _on_update_end(
-        self,
-        update: int,
-        logs: dict[str, Any] | None = None,
-    ) -> None:
+        """Log one completed RL optimizer update."""
         self._log_rl_metrics(logs, fallback_step=update)
 
     def on_evaluation_end(
@@ -263,14 +249,7 @@ class WandbCallback(Callback):
         step: int,
         logs: dict[str, Any] | None = None,
     ) -> None:
-        """Log metrics after an RL evaluation group."""
-        self._on_evaluation_end(step, logs)
-
-    def _on_evaluation_end(
-        self,
-        step: int,
-        logs: dict[str, Any] | None = None,
-    ) -> None:
+        """Log one aggregate RL evaluation."""
         self._log_rl_metrics(logs, fallback_step=step)
 
     def _log_rl_metrics(
