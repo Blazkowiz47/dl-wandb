@@ -480,7 +480,7 @@ nvtx = [
 [[package]]
 name = "deep-learning-core"
 version = "0.0.34"
-source = { editable = "../dl-core" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "albumentations" },
     { name = "gymnasium" },
@@ -495,28 +495,10 @@ dependencies = [
     { name = "torchvision" },
     { name = "tqdm" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "albumentations" },
-    { name = "deep-learning-azure", marker = "extra == 'azure'", specifier = ">=0.0.18,<0.1" },
-    { name = "deep-learning-mlflow", marker = "extra == 'mlflow'", specifier = ">=0.0.11,<0.1" },
-    { name = "deep-learning-wandb", marker = "extra == 'wandb'", specifier = ">=0.0.12,<0.1" },
-    { name = "gymnasium", specifier = ">=1.3,<2" },
-    { name = "numpy" },
-    { name = "opencv-python-headless" },
-    { name = "psutil" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0" },
-    { name = "pyyaml" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.12" },
-    { name = "scikit-learn" },
-    { name = "torch" },
-    { name = "torchvision" },
-    { name = "tqdm" },
-    { name = "twine", marker = "extra == 'dev'", specifier = ">=6.0" },
+sdist = { url = "https://files.pythonhosted.org/packages/27/1e/b6247fb985a7c96993f6362a7931b7e48b67d55d78d49b879706ddedb6d4/deep_learning_core-0.0.34.tar.gz", hash = "sha256:5c8cd1fbf3372ae10b3d5fa4fb6c2d6ef90dbca78c4078a60c82e001bf931c88", size = 578628, upload-time = "2026-07-27T18:24:48.781Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/8a/8fa108819095866112a8acc31133deb167e4daf86be59f8d8ed08e3a5ab6/deep_learning_core-0.0.34-py3-none-any.whl", hash = "sha256:199f9cf8d5db84f3cc76652d5509fd5de90d5876eae49b6f369b563bdd596902", size = 306193, upload-time = "2026-07-27T18:24:47.181Z" },
 ]
-provides-extras = ["azure", "mlflow", "wandb", "dev"]
 
 [[package]]
 name = "deep-learning-wandb"
@@ -537,7 +519,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "deep-learning-core", editable = "../dl-core" },
+    { name = "deep-learning-core", specifier = ">=0.0.34,<0.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.12" },
