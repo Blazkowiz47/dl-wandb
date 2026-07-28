@@ -479,7 +479,7 @@ nvtx = [
 
 [[package]]
 name = "deep-learning-core"
-version = "0.0.34"
+version = "0.0.35"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "albumentations" },
@@ -495,14 +495,14 @@ dependencies = [
     { name = "torchvision" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/27/1e/b6247fb985a7c96993f6362a7931b7e48b67d55d78d49b879706ddedb6d4/deep_learning_core-0.0.34.tar.gz", hash = "sha256:5c8cd1fbf3372ae10b3d5fa4fb6c2d6ef90dbca78c4078a60c82e001bf931c88", size = 578628, upload-time = "2026-07-27T18:24:48.781Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/e5/d777bafdb075754128189fcdaf3e4b2f1eb46d9cfdd3ec29bac189e0631e/deep_learning_core-0.0.35.tar.gz", hash = "sha256:7031c0e097310fa8be8a45a3117dc22b022bd68141a6392594f871c530ffd94d", size = 606577, upload-time = "2026-07-28T10:14:43.36Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/8a/8fa108819095866112a8acc31133deb167e4daf86be59f8d8ed08e3a5ab6/deep_learning_core-0.0.34-py3-none-any.whl", hash = "sha256:199f9cf8d5db84f3cc76652d5509fd5de90d5876eae49b6f369b563bdd596902", size = 306193, upload-time = "2026-07-27T18:24:47.181Z" },
+    { url = "https://files.pythonhosted.org/packages/d3/bf/664b59fa0aada1b0177331043fa06e466079e5d8da3fac8ce43fed59c87a/deep_learning_core-0.0.35-py3-none-any.whl", hash = "sha256:f9d4b8ac5e83f87aeb32e3a14530288c40d9a451a4812487917e16a96d924541", size = 323936, upload-time = "2026-07-28T10:14:41.707Z" },
 ]
 
 [[package]]
 name = "deep-learning-wandb"
-version = "0.0.14"
+version = "0.0.15"
 source = { editable = "." }
 dependencies = [
     { name = "deep-learning-core" },
@@ -519,7 +519,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "deep-learning-core", specifier = ">=0.0.34,<0.1" },
+    { name = "deep-learning-core", specifier = ">=0.0.35,<0.2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.12" },

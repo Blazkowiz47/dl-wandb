@@ -3,6 +3,14 @@
 The main README shows only the latest release. This page preserves the
 release-by-release changes.
 
+## 0.0.14
+
+- W&B implements the public RL callback hooks `on_episode_end()`,
+  `on_update_end()`, and `on_evaluation_end()`
+- custom callbacks can subclass the integration without relying on private
+  underscore methods
+- the core compatibility floor moved to `deep-learning-core>=0.0.34,<0.1`
+
 ## 0.0.13
 
 - RL episode, algorithm-update, and evaluation metrics use the
