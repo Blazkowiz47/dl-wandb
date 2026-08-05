@@ -3,6 +3,13 @@
 The main README shows only the latest release. This page preserves the
 release-by-release changes.
 
+## 0.0.15
+
+- the supported core range includes the architecture-free
+  `deep-learning-core==0.1.0` trainer and registry boundary
+- W&B callbacks, trackers, metric sources, and scaffold behavior remain
+  unchanged
+
 ## 0.0.14
 
 - W&B implements the public RL callback hooks `on_episode_end()`,
