@@ -65,8 +65,8 @@ Then scaffold a W&B-ready experiment repository:
 uv run dl-init --name my-exp --with-wandb
 ```
 
-The generated experiment package will import `dl_wandb` automatically so the
-`wandb` callback registers at runtime.
+The installed package registers the `wandb` callback through dl-core's runtime
+extension entry points. The generated package also imports `dl_wandb`.
 It also ignores `.env`, other local environment files, and `wandb/`, while
 keeping `.env.example` available as the credential template.
 

@@ -45,5 +45,8 @@ Issues = "https://github.com/Blazkowiz47/dl-wandb/issues"
 [project.entry-points."dl_core.init_extensions"]
 wandb = "dl_wandb.init_extension:WandbInitExtension"
 
+[project.entry-points."dl_core.runtime_extensions"]
+wandb = "dl_wandb"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/dl_wandb"]
