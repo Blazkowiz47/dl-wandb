@@ -4,9 +4,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from dl_core.init_extensions import ProjectNames, ScaffoldContext
 
-from dl_wandb.init_extension import WandbInitExtension
+from dl_wandb.init_extension import WandbInitExtension, _inject_wandb_tracking_fields
+
+
+def test_wandb_tracking_patch_rejects_conflicting_backend() -> None:
+    """The extension must not create duplicate backend keys."""
+    with pytest.raises(ValueError, match="already configured"):
+        _inject_wandb_tracking_fields("tracking:\n  backend: mlflow\n")
 
 
 def test_wandb_init_extension_updates_scaffold_files(tmp_path: Path) -> None:

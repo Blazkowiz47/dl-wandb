@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import yaml
 
 from dl_core.init_extensions import InitExtension, ScaffoldContext
 
@@ -38,25 +39,26 @@ def _wandb_callback_block() -> str:
 
 
 def _inject_wandb_tracking_fields(content: str) -> str:
-    """Inject W&B-specific tracking fields into the sweep scaffold."""
-
-    if "tracking:\n" not in content:
+    """Set the W&B sweep backend without silently duplicating it."""
+    marker = "tracking:\n"
+    if content.count(marker) != 1:
+        raise ValueError("Expected one tracking block in configs/base_sweep.yaml")
+    tracking = (yaml.safe_load(content) or {}).get("tracking")
+    if not isinstance(tracking, dict):
+        raise ValueError("Expected a mapping at tracking in configs/base_sweep.yaml")
+    backend = tracking.get("backend")
+    if backend == "wandb":
         return content
-
-    if "tracking:\n  backend: wandb\n" in content:
-        return content
-
-    return content.replace(
-        "tracking:\n",
-        "tracking:\n  backend: wandb\n  entity: null\n",
-        1,
-    )
+    if backend is not None:
+        raise ValueError("Sweep tracking backend is already configured")
+    return content.replace(marker, f"{marker}  backend: wandb\n  entity: null\n", 1)
 
 
 class WandbInitExtension(InitExtension):
     """Expose W&B scaffold wiring when dl-wandb is installed."""
 
     name = "wandb"
+    tracking_backend = "wandb"
 
     def display_name(self) -> str:
         """Return the prompt label for W&B support."""
@@ -106,12 +108,16 @@ class WandbInitExtension(InitExtension):
             "W&B support is enabled. Run `wandb login` and review the "
             "`callbacks.wandb` block in `configs/base.yaml` before training."
         )
-        context.replace_in_file(
-            Path("configs") / "base.yaml",
-            "  metric_logger:\n    log_frequency: 1\n",
-            "  metric_logger:\n    log_frequency: 1\n"
-            f"{_wandb_callback_block()}",
-        )
+        base_path = Path("configs") / "base.yaml"
+        if "  wandb:\n" not in context.get_file(base_path):
+            if "  metric_logger:\n    log_frequency: 1\n" not in context.get_file(base_path):
+                raise ValueError("W&B callback anchor not found in configs/base.yaml")
+            context.replace_in_file(
+                base_path,
+                "  metric_logger:\n    log_frequency: 1\n",
+                "  metric_logger:\n    log_frequency: 1\n"
+                f"{_wandb_callback_block()}",
+            )
         context.replace_in_file(
             Path("configs") / "base_sweep.yaml",
             context.get_file(Path("configs") / "base_sweep.yaml"),
