@@ -224,7 +224,7 @@ class WandbCallback(Callback):
 
         scalars = _extract_scalars(logs)
         if scalars:
-            wandb.log(scalars, step=epoch + 1)
+            wandb.log(scalars, step=epoch)
 
     def on_episode_end(
         self,
@@ -284,5 +284,7 @@ class WandbCallback(Callback):
         if self.run is None:
             return
 
-        wandb.finish()
+        run_status = (logs or {}).get("status", "completed")
+        exit_code = 0 if run_status == "completed" else 1
+        wandb.finish(exit_code=exit_code)
         self.run = None

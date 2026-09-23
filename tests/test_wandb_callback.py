@@ -49,7 +49,7 @@ def test_wandb_callback_initializes_logs_and_finishes(
     init_calls: list[dict] = []
     log_calls: list[tuple[dict, int | None]] = []
     metric_calls: list[tuple[str, str | None]] = []
-    finish_calls: list[bool] = []
+    finish_calls: list[int] = []
 
     fake_run = SimpleNamespace(name="demo-run")
 
@@ -60,8 +60,8 @@ def test_wandb_callback_initializes_logs_and_finishes(
     def fake_log(payload, step=None):
         log_calls.append((payload, step))
 
-    def fake_finish():
-        finish_calls.append(True)
+    def fake_finish(exit_code: int = 0):
+        finish_calls.append(exit_code)
 
     monkeypatch.setattr(
         "dl_wandb.callbacks.wandb.wandb",
@@ -96,7 +96,7 @@ def test_wandb_callback_initializes_logs_and_finishes(
     assert init_calls[0]["group"] == "demo-group"
     assert init_calls[0]["name"] == "demo-run"
     assert log_calls == [
-        ({"train_loss": 0.5}, 1),
+        ({"train_loss": 0.5}, 0),
         ({"episode/return": 4.5, "global_step": 20.0}, None),
         ({"sac/critic_loss": 0.2, "global_step": 21.0}, None),
         ({"evaluation/mean_return": 5.0, "global_step": 21.0}, None),
@@ -107,7 +107,29 @@ def test_wandb_callback_initializes_logs_and_finishes(
         ("sac/critic_loss", "global_step"),
         ("evaluation/mean_return", "global_step"),
     ]
-    assert finish_calls == [True]
+    assert finish_calls == [0]
+
+
+def test_wandb_callback_propagates_failed_and_interrupted_statuses(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    """Unsuccessful trainer runs should close W&B with a nonzero exit code."""
+
+    finish_calls: list[int] = []
+    monkeypatch.setattr(
+        "dl_wandb.callbacks.wandb.wandb",
+        SimpleNamespace(
+            finish=lambda exit_code=0: finish_calls.append(exit_code),
+        ),
+    )
+    callback = WandbCallback(project="demo-project")
+    callback.set_trainer(DummyTrainer())
+
+    for run_status in ["failed", "interrupted"]:
+        callback.run = SimpleNamespace()
+        callback.on_training_end({"status": run_status})
+
+    assert finish_calls == [1, 1]
 
 
 def test_wandb_callback_uses_tracking_context_as_sweep_name(

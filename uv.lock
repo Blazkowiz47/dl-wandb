@@ -479,8 +479,8 @@ nvtx = [
 
 [[package]]
 name = "deep-learning-core"
-version = "0.1.4"
-source = { registry = "https://test.pypi.org/simple" }
+version = "0.1.7"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "albumentations" },
     { name = "gymnasium" },
@@ -494,9 +494,9 @@ dependencies = [
     { name = "torch" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://test-files.pythonhosted.org/packages/fa/a9/2e0c2fcac19d0b53a17041dd39bda814f9e167a0d869bea6ac439d68efb3/deep_learning_core-0.1.4.tar.gz", hash = "sha256:3cb8edc1e99c46308d7848377bd551bdf267f5e62d8472f7ff26ec87c69f62fb", size = 610708, upload-time = "2026-08-05T18:51:12.848Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/84/04/4858247d0ce1bbb5cce4faa6b39f78caec9229db0bd7799a09eee9649059/deep_learning_core-0.1.7.tar.gz", hash = "sha256:a3269801fc77c268d8b4394d076526a891d0070f47c4478a2bbc2b516b350650", size = 615438, upload-time = "2026-09-22T12:49:06.051Z" }
 wheels = [
-    { url = "https://test-files.pythonhosted.org/packages/3d/da/132c9fb51025051b5ecc275d157a97d286ca4bb2103cd04ba41e75b924a4/deep_learning_core-0.1.4-py3-none-any.whl", hash = "sha256:b31af5d76de113802667189a8ed8f683e1a95b848cee1323985e9752cf3718ec", size = 330197, upload-time = "2026-08-05T18:51:11.423Z" },
+    { url = "https://files.pythonhosted.org/packages/2a/c5/a8b4a592ebaa7623cba6beb32f746e0c8557ce19513499ad1d5e67a43925/deep_learning_core-0.1.7-py3-none-any.whl", hash = "sha256:1fbc468b821992421b7bc91e31558ccbbb7d34e892cb0a0b1293e62f07a3c50f", size = 328491, upload-time = "2026-09-22T12:49:04.298Z" },
 ]
 
 [[package]]
