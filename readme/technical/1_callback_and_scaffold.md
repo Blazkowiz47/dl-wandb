@@ -19,7 +19,8 @@ At runtime:
 - it derives project, sweep name, run name, and notes from callback params plus
   top-level `tracking` and `runtime` config
 - it logs scalar epoch metrics through `wandb.log`
-- it closes the run on training end
+- it records the terminal status in `dl_core/run_status` and closes the run
+  after trainer finalization
 
 Sweep analysis also maps terminal W&B run states into the common analyzer
 statuses, so remotely finished runs become `completed` and crashed, failed,

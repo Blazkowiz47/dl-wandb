@@ -51,7 +51,7 @@ def test_wandb_callback_initializes_logs_and_finishes(
     metric_calls: list[tuple[str, str | None]] = []
     finish_calls: list[int] = []
 
-    fake_run = SimpleNamespace(name="demo-run")
+    fake_run = SimpleNamespace(name="demo-run", summary={})
 
     def fake_init(**kwargs):
         init_calls.append(kwargs)
@@ -91,6 +91,8 @@ def test_wandb_callback_initializes_logs_and_finishes(
         {"evaluation/mean_return": 5.0, "global_step": 21},
     )
     callback.on_training_end()
+    assert finish_calls == []
+    callback.on_training_finalized()
 
     assert init_calls[0]["project"] == "demo-project"
     assert init_calls[0]["group"] == "demo-group"
@@ -108,6 +110,7 @@ def test_wandb_callback_initializes_logs_and_finishes(
         ("evaluation/mean_return", "global_step"),
     ]
     assert finish_calls == [0]
+    assert fake_run.summary["dl_core/run_status"] == "completed"
 
 
 def test_wandb_callback_propagates_failed_and_interrupted_statuses(
@@ -125,9 +128,13 @@ def test_wandb_callback_propagates_failed_and_interrupted_statuses(
     callback = WandbCallback(project="demo-project")
     callback.set_trainer(DummyTrainer())
 
-    for run_status in ["failed", "interrupted"]:
-        callback.run = SimpleNamespace()
+    for prior_calls, run_status in enumerate(["failed", "interrupted"]):
+        summary: dict[str, str] = {}
+        callback.run = SimpleNamespace(summary=summary)
         callback.on_training_end({"status": run_status})
+        assert len(finish_calls) == prior_calls
+        callback.on_training_finalized({"status": run_status})
+        assert summary["dl_core/run_status"] == run_status
 
     assert finish_calls == [1, 1]
 

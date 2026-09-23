@@ -276,15 +276,27 @@ class WandbCallback(Callback):
         wandb.log(scalars)
 
     def on_training_end(self, logs: dict[str, Any] | None = None) -> None:
-        """Close the active W&B run at the end of training."""
+        """Keep the W&B run open until trainer finalization completes."""
 
         super().on_training_end(logs)
+
+    def on_training_finalized(self, logs: dict[str, Any] | None = None) -> None:
+        """Record the final status and close the W&B run."""
+        super().on_training_finalized(logs)
         if not self.is_main_process():
             return
         if self.run is None:
             return
 
-        run_status = (logs or {}).get("status", "completed")
+        run_status = str((logs or {}).get("status", "completed"))
+        summary = getattr(self.run, "summary", None)
+        if summary is not None:
+            try:
+                summary["dl_core/run_status"] = run_status
+            except Exception as exc:
+                self.logger.warning(f"Failed to record W&B run status: {exc}")
         exit_code = 0 if run_status == "completed" else 1
-        wandb.finish(exit_code=exit_code)
-        self.run = None
+        try:
+            wandb.finish(exit_code=exit_code)
+        finally:
+            self.run = None

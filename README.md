@@ -90,7 +90,8 @@ run group unless `tracking.sweep_name` overrides it.
 - epoch, RL episode, algorithm-update, and evaluation metric logging, with RL
   series indexed by the environment-transition `global_step`
 - epoch metrics aligned with the trainer and `history.json` epoch index
-- nonzero W&B exit codes for failed and interrupted runs
+- nonzero W&B exit codes for failed and interrupted runs, with the exact
+  terminal state retained in the run summary
 - `dl-init --with-wandb` scaffold support
 - generated W&B callback defaults and `.env.example`
 
