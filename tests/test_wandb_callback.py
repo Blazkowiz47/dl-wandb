@@ -5,6 +5,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 from pytest import MonkeyPatch
+import torch
 
 from dl_wandb.callbacks.wandb import WandbCallback
 
@@ -79,13 +80,24 @@ def test_wandb_callback_initializes_logs_and_finishes(
     callback.set_trainer(DummyTrainer())
 
     callback.on_training_start()
-    callback.on_epoch_end(0, {"train_loss": 0.5, "note": "ignored"})
+    callback.on_epoch_end(
+        0,
+        {"train_loss": 0.5, "note": "ignored", "diverged": float("nan")},
+    )
+    callback.on_epoch_end(1, {"diverged": float("nan")})
     callback.on_episode_end(2, {"episode/return": 4.5, "global_step": 20})
     callback.on_episode_end(
         200,
         {"phase": "evaluation", "episode/return": 99.0, "global_step": 20},
     )
-    callback.on_update_end(3, {"sac/critic_loss": 0.2, "global_step": 21})
+    callback.on_update_end(
+        3,
+        {
+            "sac/critic_loss": 0.2,
+            "global_step": 21,
+            "overflow": torch.tensor(float("inf")),
+        },
+    )
     callback.on_evaluation_end(
         21,
         {"evaluation/mean_return": 5.0, "global_step": 21},

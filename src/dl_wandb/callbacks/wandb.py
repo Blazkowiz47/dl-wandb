@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import Any
 
@@ -46,17 +47,19 @@ def _extract_scalars(logs: dict[str, Any] | None) -> dict[str, float]:
     for key, value in logs.items():
         if isinstance(value, bool):
             continue
-        if isinstance(value, (int, float)):
-            scalars[key] = float(value)
-            continue
-        if isinstance(value, torch.Tensor) and value.numel() == 1:
-            scalars[key] = float(value.item())
-            continue
-        if hasattr(value, "item") and callable(value.item):
-            try:
-                scalars[key] = float(value.item())
-            except Exception:
+        try:
+            if isinstance(value, (int, float)):
+                scalar = float(value)
+            elif isinstance(value, torch.Tensor) and value.numel() == 1:
+                scalar = float(value.item())
+            elif hasattr(value, "item") and callable(value.item):
+                scalar = float(value.item())
+            else:
                 continue
+        except Exception:
+            continue
+        if math.isfinite(scalar):
+            scalars[key] = scalar
     return scalars
 
 
