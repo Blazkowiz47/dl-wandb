@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "deep-learning-wandb"
-version = "0.0.16"
+version = "0.0.17"
 description = "Weights & Biases integration layer for dl-core."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -24,7 +24,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "deep-learning-core>=0.1.4,<0.2",
+    "deep-learning-core>=0.1.8,<0.2",
     "wandb",
 ]
 
@@ -33,7 +33,7 @@ dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
     "ruff>=0.12",
-    "torch>=2.11,<3",
+    "torch>2.3",
     "twine>=6.0",
 ]
 

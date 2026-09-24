@@ -7,15 +7,15 @@ Public Weights & Biases integration layer for `deep-learning-core`.
 framework while still allowing users to install it through
 `deep-learning-core[wandb]`.
 
-Current release: `deep-learning-wandb==0.0.16`.
-Requires `deep-learning-core>=0.1.4,<0.2`.
+Current release: `deep-learning-wandb==0.0.17`.
+Requires `deep-learning-core>=0.1.8,<0.2`.
 
-## What's New in 0.0.16?
+## What's New in 0.0.17?
 
-- the core compatibility floor is now `deep-learning-core>=0.1.4,<0.2`, keeping
-  W&B installations aligned with the coordinated package release
-- W&B callbacks, trackers, metric sources, and scaffold behavior remain
-  unchanged while new trainer and tar-dataset functionality comes from core
+- W&B logs omit invalid scalar metrics and finish runs with explicit terminal
+  status
+- runtime extension registration and scaffold setup work with dl-core 0.1.8
+- the development PyTorch requirement is `torch>2.3` without an upper cap
 
 Previous versions are recorded in the [release history](RELEASES.md).
 

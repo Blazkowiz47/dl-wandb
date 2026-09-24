@@ -10,7 +10,7 @@ import dl_wandb
 def test_package_import_exposes_version() -> None:
     """The package root should import successfully and expose a version."""
 
-    assert dl_wandb.__version__ == "0.0.16"
+    assert dl_wandb.__version__ == "0.0.17"
 
 
 def test_package_exposes_runtime_entry_point() -> None:

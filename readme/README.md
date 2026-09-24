@@ -1,14 +1,13 @@
 # dl-wandb Documentation
 
-Current public release: `deep-learning-wandb==0.0.16`, requiring
-`deep-learning-core>=0.1.4,<0.2`.
+Current public release: `deep-learning-wandb==0.0.17`, requiring
+`deep-learning-core>=0.1.8,<0.2`.
 
-## What's New in 0.0.16?
+## What's New in 0.0.17?
 
-- the package now requires the coordinated `deep-learning-core>=0.1.4,<0.2`
-  release
-- W&B tracking and scaffold behavior remain stable; iteration training and tar
-  datasets are supplied by core
+- invalid scalar metrics are omitted, and runs finish with an explicit
+  terminal status
+- the package uses dl-core 0.1.8 for runtime extension registration
 
 - [Release History](../RELEASES.md)
 - [`dl-core`](https://github.com/Blazkowiz47/dl-core)
